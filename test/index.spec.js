@@ -13,23 +13,24 @@ describe('Plugin', () => {
     });
 
     it('sets default options', (done) => {
-        let instance = new plugin();
+        let mdInstance = md();
+        let instance = new plugin(mdInstance);
         expect(instance).to.have.property('options');
         expect(instance.options).to.have.property('wrapTag').to.equal('span');
         expect(instance.options).to.have.property('wrapClass').to.equal('indent-text');
         done();
     });
 
-    it('checks inline token', (done) => {
-        let methodTested = plugin.__get__('isInline');
+    it('checks text token', (done) => {
+        let methodTested = plugin.__get__('isText');
         let dummyToken = new Token('inline', '', 0);
         expect(methodTested(dummyToken)).to.be.true;
         done();
     });
 
-    it('checks paragraph open token', (done) => {
-        let methodTested = plugin.__get__('isParagraph');
-        let dummyToken = new Token('paragraph_open', 'p', 1);
+    it('checks soft break token', (done) => {
+        let methodTested = plugin.__get__('isSoftBreak');
+        let dummyToken = new Token('softbreak', 'br', 0);
         expect(methodTested(dummyToken)).to.be.true;
         done();
     });
@@ -94,8 +95,24 @@ describe('Plugin', () => {
         done();
     });
 
-    it('sends tokens', (done) => {
-        expect(() => md().use(plugin)).to.not.throw();
+    it('checks pseudo list from a token array', (done) => {
+        let methodTested = plugin.__get__('isPseudoList');
+        let tokens = [];
+
+        let textToken = new Token('text', '', 0);
+        textToken.content = 'some text';
+
+        let breakToken = new Token('softbreak', 'br', 0);
+
+        let pseudoListToken = new Token('text', '', 0);
+        pseudoListToken.content = 'vi)some text';
+
+        tokens.push(textToken);
+        tokens.push(breakToken);
+        tokens.push(pseudoListToken);
+
+        expect(methodTested(tokens, 2)).to.be.true;
+
         done();
     });
 });
