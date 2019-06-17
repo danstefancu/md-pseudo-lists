@@ -1,0 +1,23 @@
+{
+  "name": "md-pseudo-lists",
+  "version": "0.1.0",
+  "description": "A markdown-it plugin to add classes for pseudo lists",
+  "main": "index.js",
+  "scripts": {
+    "start": "echo \"Error: no test specified\" && exit 1",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "markdown",
+    "markdown-it",
+    "markdown-it-plugin",
+    "lists"
+  ],
+  "author": "Dan Stefancu",
+  "license": "ISC",
+  "dependencies": {},
+  "devDependencies": {
+    "markdown-it": "^8.4.2",
+    "mocha": "^6.1.4"
+  }
+}
