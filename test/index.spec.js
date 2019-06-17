@@ -163,4 +163,16 @@ describe('Plugin', () => {
         expect(tokens[4]).to.have.property('type', 'pseudo_list_close');
         done();
     });
+
+    it('renders our tags', (done) => {
+        let mdInstance = md();
+        mdInstance.use(plugin);
+
+        let result = mdInstance.render(`some text
+a)pseudo list`);
+        expect(result).to.be.a('string');
+        expect(result).to.equal('<p>some text\n' +
+            '<span class="indent-text">a)pseudo list</span></p>\n');
+        done();
+    });
 });
