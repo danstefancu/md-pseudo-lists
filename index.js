@@ -18,9 +18,27 @@ function addRule(state) {
     for (let i = 1; i < tokens.length; i++) {
 
         if (isPseudoList(tokens, i)) {
+            addTags(tokens, i, state.Token);
         }
     }
 }
+
+function addTags(tokens, i, Token) {
+    tokens.splice(i, 0, insertBefore(Token));
+    tokens.splice(i+2, 0, insertAfter(Token));
+}
+
+function insertBefore(Constructor) {
+    let token = new Constructor('pseudo_list_open', defaults.wrapTag, 1);
+    token.attrs = [['class', defaults.wrapClass]];
+
+    return token;
+}
+
+function insertAfter(Constructor) {
+    return new Constructor('pseudo_list_close', defaults.wrapTag, -1);
+}
+
 function isPseudoList(tokens, index) {
     return isText(tokens[index]) &&
         isSoftBreak(tokens[index - 1]) &&

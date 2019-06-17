@@ -23,7 +23,7 @@ describe('Plugin', () => {
 
     it('checks text token', (done) => {
         let methodTested = plugin.__get__('isText');
-        let dummyToken = new Token('inline', '', 0);
+        let dummyToken = new Token('text', '', 0);
         expect(methodTested(dummyToken)).to.be.true;
         done();
     });
@@ -113,6 +113,54 @@ describe('Plugin', () => {
 
         expect(methodTested(tokens, 2)).to.be.true;
 
+        done();
+    });
+
+    it('inserts new token before given token position', (done) => {
+        let methodTested = plugin.__get__('addTags');
+        let tokens = [];
+
+        let textToken = new Token('text', '', 0);
+        textToken.content = 'some text';
+
+        let breakToken = new Token('softbreak', 'br', 0);
+
+        let pseudoListToken = new Token('text', '', 0);
+        pseudoListToken.content = 'vi)some text';
+
+        tokens.push(textToken);
+        tokens.push(breakToken);
+        tokens.push(pseudoListToken);
+
+        methodTested(tokens, 2, Token);
+
+        expect(tokens).to.have.length.greaterThan(3);
+        expect(tokens[2]).to.be.instanceOf(Token);
+        expect(tokens[2]).to.have.property('type', 'pseudo_list_open');
+        done();
+    });
+
+    it('inserts new token after given token position', (done) => {
+        let methodTested = plugin.__get__('addTags');
+        let tokens = [];
+
+        let textToken = new Token('text', '', 0);
+        textToken.content = 'some text';
+
+        let breakToken = new Token('softbreak', 'br', 0);
+
+        let pseudoListToken = new Token('text', '', 0);
+        pseudoListToken.content = 'vi)some text';
+
+        tokens.push(textToken);
+        tokens.push(breakToken);
+        tokens.push(pseudoListToken);
+
+        methodTested(tokens, 2, Token);
+
+        expect(tokens).to.have.length.greaterThan(4);
+        expect(tokens[4]).to.be.instanceOf(Token);
+        expect(tokens[4]).to.have.property('type', 'pseudo_list_close');
         done();
     });
 });
