@@ -9,4 +9,12 @@ describe('Plugin', () => {
         expect(() => md().use(plugin)).to.not.throw();
         done();
     });
+
+    it('sets default options', (done) => {
+        let instance = new plugin();
+        expect(instance).to.have.property('options');
+        expect(instance.options).to.have.property('wrapTag').to.equal('span');
+        expect(instance.options).to.have.property('wrapClass').to.equal('indent-text');
+        done();
+    });
 });
