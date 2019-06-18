@@ -195,4 +195,18 @@ ii)roman list`);
         expect(methodTested(dummyToken)).to.equal('dash');
         done();
     });
+
+    it('renders the readme example', (done) => {
+        let mdInstance = md();
+        mdInstance.use(plugin);
+
+        let result = mdInstance.render(`
+some text
+a)oh, here's
+b)my
+c)list
+`);
+        expect(result).to.be.a('string');
+        done();
+    })
 });
