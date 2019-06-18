@@ -17,7 +17,7 @@ describe('Plugin', () => {
         let instance = new plugin(mdInstance);
         expect(instance).to.have.property('options');
         expect(instance.options).to.have.property('wrapTag').to.equal('span');
-        expect(instance.options).to.have.property('wrapClass').to.equal('indent-text');
+        expect(instance.options).to.have.property('wrapClass').to.equal('pseudo-list');
         done();
     });
 
@@ -172,7 +172,21 @@ describe('Plugin', () => {
 a)pseudo list`);
         expect(result).to.be.a('string');
         expect(result).to.equal('<p>some text\n' +
-            '<span class="indent-text">a)pseudo list</span></p>\n');
+            '<span class="pseudo-list">a)pseudo list</span></p>\n');
+        done();
+    });
+
+    it('gets pseudo list type from token', (done) => {
+        let methodTested = plugin.__get__('getListType');
+        let dummyToken = new Token('text', '', 0);
+        dummyToken.content = 'a)some text';
+        expect(methodTested(dummyToken)).to.equal('literal');
+        dummyToken.content = 'ii)some text';
+        expect(methodTested(dummyToken)).to.equal('roman');
+        dummyToken.content = '20)some text';
+        expect(methodTested(dummyToken)).to.equal('numeral');
+        dummyToken.content = '-some text';
+        expect(methodTested(dummyToken)).to.equal('dash');
         done();
     });
 });
