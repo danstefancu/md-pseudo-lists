@@ -50,5 +50,6 @@ function isText(token) { return token.type === 'text'; }
 function isSoftBreak(token) { return token.type === 'softbreak'; }
 
 function isStartedWithPseudoMarker(token) {
-    return /^(-|[a-z]\)|[ivx]+\)|[0-9]+\))/.test(token.content);
+    // minus, en dash, a), iii), 10)
+    return /^(\u002d|\u2013|[a-z]\)|[ivx]+\)|[0-9]+\))/.test(token.content);
 }
