@@ -24,15 +24,17 @@ function addRule(state) {
 }
 
 function addTags(tokens, i, Token) {
-    tokens.splice(i, 0, insertBefore(Token));
+    tokens.splice(i, 0, insertBefore(Token, tokens[i]));
     tokens.splice(i+2, 0, insertAfter(Token));
 }
 
-function insertBefore(Constructor) {
-    let token = new Constructor('pseudo_list_open', defaults.wrapTag, 1);
-    token.attrs = [['class', defaults.wrapClass]];
+function insertBefore(Constructor, token) {
+    let newToken = new Constructor('pseudo_list_open', defaults.wrapTag, 1);
 
-    return token;
+    newToken.attrJoin('class', defaults.wrapClass);
+    newToken.attrJoin('class', token.pseudoListType);
+
+    return newToken;
 }
 
 function insertAfter(Constructor) {

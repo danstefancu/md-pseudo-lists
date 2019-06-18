@@ -164,15 +164,21 @@ describe('Plugin', () => {
         done();
     });
 
-    it('renders our tags', (done) => {
+    it('renders our tags with classes', (done) => {
         let mdInstance = md();
         mdInstance.use(plugin);
 
         let result = mdInstance.render(`some text
-a)pseudo list`);
+a)literal list`);
         expect(result).to.be.a('string');
         expect(result).to.equal('<p>some text\n' +
-            '<span class="pseudo-list">a)pseudo list</span></p>\n');
+            '<span class="pseudo-list literal">a)literal list</span></p>\n');
+
+        let result2 = mdInstance.render(`some text
+ii)roman list`);
+        expect(result2).to.be.a('string');
+        expect(result2).to.equal('<p>some text\n' +
+            '<span class="pseudo-list roman">ii)roman list</span></p>\n');
         done();
     });
 
