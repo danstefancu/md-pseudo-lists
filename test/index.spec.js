@@ -17,7 +17,7 @@ describe('Plugin', () => {
         let instance = new plugin(mdInstance);
         expect(instance).to.have.property('options');
         expect(instance.options).to.have.property('wrapTag').to.equal('span');
-        expect(instance.options).to.have.property('wrapClass').to.equal('indent-text');
+        expect(instance.options).to.have.property('wrapClass').to.equal('pseudo-list');
         done();
     });
 
@@ -164,15 +164,49 @@ describe('Plugin', () => {
         done();
     });
 
-    it('renders our tags', (done) => {
+    it('renders our tags with classes', (done) => {
         let mdInstance = md();
         mdInstance.use(plugin);
 
         let result = mdInstance.render(`some text
-a)pseudo list`);
+a)literal list`);
         expect(result).to.be.a('string');
         expect(result).to.equal('<p>some text\n' +
-            '<span class="indent-text">a)pseudo list</span></p>\n');
+            '<span class="pseudo-list literal">a)literal list</span></p>\n');
+
+        let result2 = mdInstance.render(`some text
+ii)roman list`);
+        expect(result2).to.be.a('string');
+        expect(result2).to.equal('<p>some text\n' +
+            '<span class="pseudo-list roman">ii)roman list</span></p>\n');
         done();
     });
+
+    it('gets pseudo list type from token', (done) => {
+        let methodTested = plugin.__get__('getListType');
+        let dummyToken = new Token('text', '', 0);
+        dummyToken.content = 'a)some text';
+        expect(methodTested(dummyToken)).to.equal('literal');
+        dummyToken.content = 'ii)some text';
+        expect(methodTested(dummyToken)).to.equal('roman');
+        dummyToken.content = '20)some text';
+        expect(methodTested(dummyToken)).to.equal('numeral');
+        dummyToken.content = '-some text';
+        expect(methodTested(dummyToken)).to.equal('dash');
+        done();
+    });
+
+    it('renders the readme example', (done) => {
+        let mdInstance = md();
+        mdInstance.use(plugin);
+
+        let result = mdInstance.render(`
+some text
+a)oh, here's
+b)my
+c)list
+`);
+        expect(result).to.be.a('string');
+        done();
+    })
 });
