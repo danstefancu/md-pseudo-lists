@@ -1,6 +1,6 @@
 {
   "name": "md-pseudo-lists",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A markdown-it plugin to add classes for pseudo lists",
   "main": "index.js",
   "scripts": {
